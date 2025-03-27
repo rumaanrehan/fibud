@@ -1,98 +1,120 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+Fibud Expert Matching Backend
+This project is the backend service for Fibud Corp’s expert-client matching system, built using NestJS and Prisma ORM. It provides a REST API to manage expert-client matches based on specialization, availability, and rating.
+________________________________________
+🚀 Project Setup Instructions
+1️⃣ Clone the Repository
+bash
+CopyEdit
+git clone https://github.com/rumaanrehan/fibud-expert-matching.git
+cd fibud-expert-matching
+2️⃣ Install Dependencies
+bash
+CopyEdit
+npm install
+3️⃣ Configure Environment Variables
+Create a .env file and add the following (modify as needed):
+env
+CopyEdit
+DATABASE_URL="postgresql://username:password@localhost:5432/fibud"
+PORT=3000
+4️⃣ Run Database Migrations
+bash
+CopyEdit
+npx prisma migrate dev --name init
+5️⃣ Start the Server
+bash
+CopyEdit
+npm run start
+API will be available at http://localhost:3000/
+________________________________________
+📌 API Documentation
+1️⃣ Create Expert-Client Match
+•	Endpoint: POST /matches
+•	Description: Add a new expert-client match.
+•	Request Body (JSON):
+json
+CopyEdit
+{
+  "expertId": 1,
+  "clientId": 5,
+  "specialization": "Software Development",
+  "rating": 4.8,
+  "availability": "Monday-Friday"
+}
+•	Response (JSON):
+json
+CopyEdit
+{
+  "id": 1,
+  "expertId": 1,
+  "clientId": 5,
+  "specialization": "Software Development",
+  "rating": 4.8,
+  "availability": "Monday-Friday",
+  "createdAt": "2024-03-27T12:00:00.000Z"
+}
+________________________________________
+2️⃣ Get Expert-Client Matches
+•	Endpoint: GET /matches
+•	Query Parameters (optional):
+o	specialization → Filter by specialization
+o	rating → Filter by minimum rating
+•	Example Request:
+sql
+CopyEdit
+GET /matches?specialization=Software Development&rating=4.5
+•	Response (JSON):
+json
+CopyEdit
+[
+  {
+    "id": 1,
+    "expertId": 1,
+    "clientId": 5,
+    "specialization": "Software Development",
+    "rating": 4.8,
+    "availability": "Monday-Friday",
+    "createdAt": "2024-03-27T12:00:00.000Z"
+  }
+]
+________________________________________
+🛠 Prisma Schema Explanation
+prisma/schema.prisma
+prisma
+CopyEdit
+model ExpertClientMatch {
+  id             Int      @id @default(autoincrement())
+  expertId       Int
+  clientId       Int
+  specialization String
+  rating         Float
+  availability   String
+  createdAt      DateTime @default(now())
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+  @@unique([expertId, clientId]) // Prevent duplicate matches
+}
+•	expertId & clientId → Foreign keys to link experts and clients.
+•	specialization → The area of expertise.
+•	rating → Expert’s rating (1-5 scale).
+•	availability → When the expert is available.
+•	createdAt → Timestamp for when the match was created.
+________________________________________
+✅ Technologies Used
+•	NestJS → Backend framework
+•	Prisma ORM → Database management
+•	PostgreSQL → Database
+•	TypeScript → Type safety
+•	Jest → Testing
+________________________________________
+🔗 Contributing
+1.	Fork the repository
+2.	Create a new branch (git checkout -b feature-branch)
+3.	Commit your changes (git commit -m "Added feature XYZ")
+4.	Push to GitHub (git push origin feature-branch)
+5.	Open a Pull Request
+________________________________________
+📧 Contact
+For any issues, contact [your email or GitHub profile link].
+________________________________________
+You can save this as README.md in the root of your project and push it to GitHub. Let me know if you need any modifications! 🚀
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
